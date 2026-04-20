@@ -1,0 +1,16 @@
+---
+layout: default
+---
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title }}</h1>
+  </header>
+  <div class="article-grid">
+    {% assign collection = site[page.collection] %}
+    {% for item in collection %}
+      <div class="article-card">
+        <h3><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h3>
+      </div>
+    {% endfor %}
+  </div>
+</article>
