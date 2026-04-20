@@ -1,0 +1,30 @@
+title: The Brick House
+description:
+baseurl: ""
+url: ""
+
+theme: minima
+
+collections:
+  how_tos:
+    output: true
+    permalink: /how-tos/:name/
+  blog:
+    output: true
+    permalink: /blog/:name/
+
+navigation:
+  - title: Home
+    url: /
+  - title: Plant Catalogue
+    url: /plant-catalogue/
+  - title: Enemies
+    url: /enemies/
+  - title: How Tos
+    url: /how-tos/
+  - title: Resources
+    url: /resources/
+  - title: About
+    url: /about/
+  - title: Blog
+    url: /blog/

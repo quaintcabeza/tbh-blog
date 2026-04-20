@@ -1,0 +1,85 @@
+---
+---
+
+$bluebonnet:    #3a5f8a;
+$paintbrush:    #d95f2b;
+$winecup:       #6b2d8b;
+$primrose:      #e8749a;
+$daisy:         #f2c94c;
+$daisy-white:   #f8f5ec;
+$text-dark:     #2c2c2c;
+$text-light:    #f8f5ec;
+
+@import "minima";
+
+body {
+  background-color: $daisy-white;
+  color: $text-dark;
+}
+
+.site-header {
+  background-color: $bluebonnet;
+  border-top: 4px solid $winecup;
+
+  .site-title,
+  .site-title:visited {
+    color: $text-light;
+  }
+}
+
+.site-nav {
+  .page-link {
+    color: $text-light;
+
+    &:hover {
+      color: $primrose;
+    }
+  }
+}
+
+.site-footer {
+  background-color: $bluebonnet;
+  color: $text-light;
+  border-top: 3px solid $paintbrush;
+}
+
+a {
+  color: $bluebonnet;
+
+  &:hover {
+    color: $winecup;
+  }
+}
+
+h1, h2, h3 {
+  color: $winecup;
+}
+
+.article-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+
+  .article-card {
+    background: white;
+    border: 1px solid lighten($bluebonnet, 40%);
+    border-top: 4px solid $paintbrush;
+    padding: 1.25rem;
+    border-radius: 4px;
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+
+      a {
+        text-decoration: none;
+        color: $winecup;
+
+        &:hover {
+          color: $paintbrush;
+        }
+      }
+    }
+  }
+}
