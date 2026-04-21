@@ -176,7 +176,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('{{ "/assets/images/bluebonnet.png" | relative_url }}');
+    background-image: url('{{ "/assets/images/bluebonnet.webp" | relative_url }}');
     background-repeat: repeat;
     background-size: contain;
     opacity: 0.6;
