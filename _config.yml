@@ -6,6 +6,9 @@ url: "https://quaintcabeza.github.io"
 theme: minima
 
 collections:
+  plants:
+    output: true
+    permalink: /plants/:name/
   blog:
     output: true
     permalink: /blog/:name/
@@ -15,13 +18,13 @@ navigation:
     url: "#"
     children:
       - title: Catalogue
-        url: /plant-catalogue/
+        url: /plants/catalogue/
       - title: Gallery
-        url: /gallery/
+        url: /plants/gallery/
       - title: Wish List
-        url: /wish-list/
+        url: /plants/wish-list/
       - title: Enemies
-        url: /enemies/
+        url: /plants/enemies/
   - title: Blog
     url: /blog/
   - title: About
