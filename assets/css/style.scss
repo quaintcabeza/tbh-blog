@@ -18,23 +18,26 @@ body {
 }
 
 .site-header {
-  background-color: $bluebonnet;
-  border-top: 4px solid $winecup;
-
-  .site-title,
-  .site-title:visited {
-    color: $text-light;
-  }
+  background-color: $daisy-white;
 }
 
 .site-nav {
   .page-link {
-    color: $text-light;
+    color: $bluebonnet;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
 
     &:hover {
       color: $primrose;
     }
   }
+}
+
+.site-banner {
+  height: 200px;
+  background-image: url('{{ "/assets/images/bluebonnet.png" | relative_url }}');
+  background-repeat: repeat;
+  background-size: contain;
 }
 
 .site-footer {
