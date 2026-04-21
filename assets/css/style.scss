@@ -1,7 +1,7 @@
 ---
 ---
 
-$bluebonnet:    #2e2e86;
+$bluebonnet:    #22226a;
 $paintbrush:    #d95f2b;
 $winecup:       #6b2d8b;
 $primrose:      #e8749a;
@@ -96,6 +96,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 3px solid $paintbrush;
 }
 
 .site-footer {
