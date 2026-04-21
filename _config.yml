@@ -1,4 +1,4 @@
-title: The Brick House
+title: A Bee in Bluebonnet
 description:
 baseurl: "/tbh-blog"
 url: "https://quaintcabeza.github.io"
@@ -6,25 +6,26 @@ url: "https://quaintcabeza.github.io"
 theme: minima
 
 collections:
-  how_tos:
+  plants:
     output: true
-    permalink: /how-tos/:name/
+    permalink: /plants/:name/
   blog:
     output: true
     permalink: /blog/:name/
 
 navigation:
-  - title: Home
-    url: /
-  - title: Plant Catalogue
-    url: /plant-catalogue/
-  - title: Enemies
-    url: /enemies/
-  - title: How Tos
-    url: /how-tos/
-  - title: Resources
-    url: /resources/
-  - title: About
-    url: /about/
+  - title: Plants
+    url: "#"
+    children:
+      - title: Catalogue
+        url: /plants/catalogue/
+      - title: Gallery
+        url: /plants/gallery/
+      - title: Wish List
+        url: /plants/wish-list/
+      - title: Enemies
+        url: /plants/enemies/
   - title: Blog
     url: /blog/
+  - title: About
+    url: /about/

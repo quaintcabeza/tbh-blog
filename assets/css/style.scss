@@ -1,40 +1,102 @@
 ---
 ---
 
-$bluebonnet:    #3a5f8a;
+$bluebonnet:    #22226a;
 $paintbrush:    #d95f2b;
 $winecup:       #6b2d8b;
 $primrose:      #e8749a;
 $daisy:         #f2c94c;
-$daisy-white:   #f8f5ec;
+$poppy-white:   #f8f5ec;
 $text-dark:     #2c2c2c;
 $text-light:    #f8f5ec;
 
 @import "minima";
 
 body {
-  background-color: $daisy-white;
+  background-color: $poppy-white;
   color: $text-dark;
 }
 
 .site-header {
   background-color: $bluebonnet;
-  border-top: 4px solid $winecup;
+  border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
 
-  .site-title,
-  .site-title:visited {
-    color: $text-light;
-  }
+.site-title,
+.site-title:visited {
+  color: white;
+  text-decoration: none;
+  font-family: 'Tangerine', cursive;
+  font-weight: 700;
+  font-size: 3.5rem;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6), 0 0 20px rgba(0,0,0,0.3);
 }
 
 .site-nav {
   .page-link {
-    color: $text-light;
+    color: $poppy-white;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
 
     &:hover {
       color: $primrose;
     }
   }
+}
+
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+
+  > .page-link {
+    cursor: default;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: $bluebonnet;
+    border: 1px solid $poppy-white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    min-width: 140px;
+    z-index: 100;
+    padding: 0.4rem 0;
+
+    a {
+      display: block;
+      padding: 0.4rem 1rem !important;
+      line-height: 1.4 !important;
+      color: $poppy-white;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      font-size: 0.9em;
+
+      &:hover {
+        color: $primrose;
+      }
+    }
+  }
+
+  &:hover .dropdown-menu {
+    display: block;
+  }
+}
+
+.site-banner {
+  height: 100px;
+  background-image: url('{{ "/assets/images/bluebonnet.png" | relative_url }}');
+  background-repeat: repeat;
+  background-size: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid $paintbrush;
 }
 
 .site-footer {
@@ -52,7 +114,7 @@ a {
 }
 
 h1, h2, h3 {
-  color: $winecup;
+  color: $bluebonnet;
 }
 
 .article-grid {
@@ -74,7 +136,7 @@ h1, h2, h3 {
 
       a {
         text-decoration: none;
-        color: $winecup;
+        color: $bluebonnet;
 
         &:hover {
           color: $paintbrush;
