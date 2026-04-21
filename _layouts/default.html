@@ -41,6 +41,14 @@
       document.getElementById('nav-trigger') && document.getElementById('nav-trigger').addEventListener('change', positionMobileNav);
       window.addEventListener('resize', positionMobileNav);
 
+      document.addEventListener('click', function(e) {
+        var nav = document.querySelector('.site-nav');
+        var trigger = document.getElementById('nav-trigger');
+        if (trigger && trigger.checked && nav && !nav.contains(e.target)) {
+          trigger.checked = false;
+        }
+      });
+
     </script>
   </body>
 </html>
