@@ -36,6 +36,28 @@ body {
 }
 
 .site-nav {
+  .nav-trigger { display: none; }
+
+  label[for="nav-trigger"],
+  .menu-icon {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  label[for="nav-trigger"] {
+    background-color: $bluebonnet;
+  }
+
+  .menu-icon {
+    display: none;
+    svg path { fill: $poppy-white; }
+  }
+
+  .nav-links {
+    display: inline;
+  }
+
   .page-link {
     color: $poppy-white;
     text-transform: uppercase;
@@ -43,6 +65,57 @@ body {
 
     &:hover {
       color: $primrose;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    border: none !important;
+    background-color: transparent !important;
+    text-align: left !important;
+
+    .menu-icon { display: block; }
+
+    .nav-links {
+      display: none;
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 200px;
+      background: $bluebonnet;
+      border-left: 1px solid $poppy-white;
+      border-bottom: 1px solid $poppy-white;
+      padding: 0.5rem 0;
+      z-index: 1001;
+
+      // flatten everything to block
+      a, span.page-link, .nav-dropdown, .dropdown-menu {
+        display: block !important;
+        position: static !important;
+        box-shadow: none !important;
+        border: none !important;
+        float: none !important;
+        text-align: left !important;
+      }
+
+      // top-level items
+      .page-link {
+        padding: 0.3rem 1rem !important;
+        margin-left: 0 !important;
+        color: $poppy-white;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        font-size: 1em;
+      }
+
+      // sub-items
+      .dropdown-menu a {
+        padding: 0.2rem 1rem 0.2rem 1.75rem !important;
+        font-size: 0.8em;
+      }
+    }
+
+    .nav-trigger:checked ~ .nav-links {
+      display: block;
     }
   }
 }
@@ -61,7 +134,9 @@ body {
     top: 100%;
     left: 0;
     background: $bluebonnet;
-    border: 1px solid $poppy-white;
+    border-left: 1px solid $poppy-white;
+    border-right: 1px solid $poppy-white;
+    border-bottom: 1px solid $poppy-white;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     min-width: 140px;
     z-index: 100;
@@ -69,8 +144,8 @@ body {
 
     a {
       display: block;
-      padding: 0.4rem 1rem !important;
-      line-height: 1.4 !important;
+      padding: 0.4rem 1rem;
+      line-height: 1.4;
       color: $poppy-white;
       text-decoration: none;
       text-transform: uppercase;
