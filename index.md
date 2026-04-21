@@ -1,5 +1,5 @@
 ---
 layout: page
-title: The Brick House
+title: Home
 permalink: /
 ---

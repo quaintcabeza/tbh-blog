@@ -20,6 +20,9 @@ body {
 .site-header {
   background-color: $bluebonnet;
   border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .site-title,
@@ -110,7 +113,7 @@ a {
 }
 
 h1, h2, h3 {
-  color: $winecup;
+  color: $bluebonnet;
 }
 
 .article-grid {
@@ -132,7 +135,7 @@ h1, h2, h3 {
 
       a {
         text-decoration: none;
-        color: $winecup;
+        color: $bluebonnet;
 
         &:hover {
           color: $paintbrush;
