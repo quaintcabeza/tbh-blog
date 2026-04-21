@@ -164,14 +164,27 @@ body {
 }
 
 .site-banner {
+  position: relative;
   height: 100px;
-  background-image: url('{{ "/assets/images/bluebonnet.png" | relative_url }}');
-  background-repeat: repeat;
-  background-size: contain;
+  background-color: rgba(0,0,0,0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   border-bottom: 3px solid $paintbrush;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('{{ "/assets/images/bluebonnet.png" | relative_url }}');
+    background-repeat: repeat;
+    background-size: contain;
+    opacity: 0.6;
+  }
+
+  .site-title {
+    position: relative;
+  }
 }
 
 .site-footer {
