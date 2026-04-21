@@ -1,5 +1,16 @@
 <nav class="site-nav">
   {% for item in site.navigation %}
-    <a class="page-link{% if page.url == item.url %} active{% endif %}" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+    {% if item.children %}
+      <div class="nav-dropdown">
+        <span class="page-link">{{ item.title }}</span>
+        <div class="dropdown-menu">
+          {% for child in item.children %}
+            <a href="{{ child.url | relative_url }}">{{ child.title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <a class="page-link{% if page.url == item.url %} active{% endif %}" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+    {% endif %}
   {% endfor %}
 </nav>
