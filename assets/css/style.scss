@@ -33,8 +33,48 @@ body {
   }
 }
 
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+
+  > .page-link {
+    cursor: default;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: $daisy-white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    min-width: 140px;
+    z-index: 100;
+    padding: 0.25rem 0;
+
+    a {
+      display: block;
+      padding: 0.4rem 1rem !important;
+      line-height: 1.4 !important;
+      color: $bluebonnet;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      font-size: 0.9em;
+
+      &:hover {
+        color: $primrose;
+      }
+    }
+  }
+
+  &:hover .dropdown-menu {
+    display: block;
+  }
+}
+
 .site-banner {
-  height: 200px;
+  height: 100px;
   background-image: url('{{ "/assets/images/bluebonnet.png" | relative_url }}');
   background-repeat: repeat;
   background-size: contain;
