@@ -29,5 +29,18 @@
       </div>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
+    <script>
+      function positionMobileNav() {
+        var header = document.querySelector('.site-header');
+        var navLinks = document.querySelector('.nav-links');
+        if (header && navLinks) {
+          navLinks.style.top = header.getBoundingClientRect().bottom + 'px';
+        }
+      }
+
+      document.getElementById('nav-trigger') && document.getElementById('nav-trigger').addEventListener('change', positionMobileNav);
+      window.addEventListener('resize', positionMobileNav);
+
+    </script>
   </body>
 </html>
