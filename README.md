@@ -1,5 +1,5 @@
 # tbh-blog
-Native Plants at The Brick House
+We have a bee in our bonnet over native plants at The Brick House
 
 ## Local Development
 
