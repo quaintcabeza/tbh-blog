@@ -177,8 +177,8 @@ body {
     position: absolute;
     inset: 0;
     background-image: url('{{ "/assets/images/bluebonnet.webp" | relative_url }}');
-    background-repeat: repeat;
-    background-size: contain;
+    background-repeat: no-repeat;
+    background-size: cover;
     opacity: 0.6;
   }
 
