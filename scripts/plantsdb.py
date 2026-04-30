@@ -615,22 +615,28 @@ def process_plant(scientific_name: str, existing: Optional[dict], rescrape: bool
     # Calculate derived fields
     data = calculate_all_fields(data)
 
-    # For new plants, set override fields to corresponding scraped/calculated values
+    # Override field mappings
+    override_mappings = {
+        "override_preferred_name": "preferred_name",
+        "override_bloom_color": "bloom_color",
+        "override_bloom_period": "bloom_period",
+        "override_light_requirement": "light_requirement",
+        "override_water_drops": "water_drops",
+        "override_size": "size",
+    }
+
     if not existing:
-        # Initialize manual fields to empty
+        # New plant: initialize manual fields to empty
         for field in MANUAL_FIELDS:
             data[field] = ""
         # Set override fields to their source values
-        override_mappings = {
-            "override_preferred_name": "preferred_name",
-            "override_bloom_color": "bloom_color",
-            "override_bloom_period": "bloom_period",
-            "override_light_requirement": "light_requirement",
-            "override_water_drops": "water_drops",
-            "override_size": "size",
-        }
         for override_field, source_field in override_mappings.items():
             data[override_field] = data.get(source_field, "")
+    else:
+        # Existing plant: fill in any empty override fields
+        for override_field, source_field in override_mappings.items():
+            if not data.get(override_field):
+                data[override_field] = data.get(source_field, "")
 
     return data, None
 
