@@ -20,6 +20,7 @@ Dependencies:
 
 import argparse
 import csv
+import json
 import re
 import sys
 import time
@@ -86,13 +87,8 @@ MANUAL_FIELDS = [
 
 CSV_FIELDNAMES = SCRAPED_FIELDS + CALCULATED_FIELDS + OVERRIDE_FIELDS + MANUAL_FIELDS
 
-# Plant profile sections
-PROFILE_SECTIONS = [
-    "Impressions",
-    "Preferred Propagation Method",
-    "Seed Collection",
-    "Trials and Tribulations",
-]
+# Plant profile sections - loaded from src/data/plant-sections.json
+PLANT_SECTIONS_FILE = REPO_ROOT / "src" / "data" / "plant-sections.json"
 
 # npsot soil types that describe moisture rather than texture
 SOIL_MOISTURE_TERMS = {"dry", "moist", "wet", "well drained", "mesic"}
@@ -547,6 +543,17 @@ def save_errors(errors: list[dict]) -> None:
 # MDX page generation
 # ---------------------------------------------------------------------------
 
+def load_profile_sections() -> list[str]:
+    """Load profile sections from src/data/plant-sections.json."""
+    if not PLANT_SECTIONS_FILE.exists():
+        print(f"Warning: {PLANT_SECTIONS_FILE} not found, using empty sections", file=sys.stderr)
+        return []
+
+    with PLANT_SECTIONS_FILE.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+        return data.get("sections", [])
+
+
 def create_plant_page(scientific_name: str) -> bool:
     """
     Create a stub MDX page for a plant if it doesn't exist.
@@ -563,13 +570,15 @@ def create_plant_page(scientific_name: str) -> bool:
     images_dir = plant_dir / "images"
     images_dir.mkdir(exist_ok=True)
 
+    sections = load_profile_sections()
+
     # Create stub MDX with empty sections
     content = f"""---
 scientific_name: "{scientific_name}"
 ---
 
 """
-    for section in PROFILE_SECTIONS:
+    for section in sections:
         content += f"## {section}\n\n"
 
     mdx_file.write_text(content, encoding="utf-8")
