@@ -698,8 +698,9 @@ def main() -> None:
             else:
                 print("OK")
 
-        # Rate limiting
-        if i < len(names_to_process) - 1:
+        # Rate limiting only when hitting the web
+        did_scrape = not existing or args.rescrape
+        if did_scrape and i < len(names_to_process) - 1:
             time.sleep(2)
 
     # Save results
