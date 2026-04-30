@@ -30,12 +30,17 @@ Add a single plant:
 python3 plantsdb.py "Salvia farinacea"
 ```
 
+Add a plant with descriptors:
+```bash
+python3 plantsdb.py "Salvia farinacea" --descriptors "Striking, Versatile, Pollinator magnet"
+```
+
 Add multiple plants:
 ```bash
 python3 plantsdb.py "Salvia farinacea, Echinacea purpurea, Malvaviscus arboreus var. drummondii"
 ```
 
-Add plants from a CSV file (must have `scientific_name` column):
+Add plants from a CSV file (must have `scientific_name` column, optionally `descriptors`):
 ```bash
 python3 plantsdb.py --csv plants_to_add.csv
 ```
