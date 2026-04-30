@@ -1,0 +1,200 @@
+@use 'variables';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: var(--poppy-white);
+  color: var(--text-dark);
+}
+
+.wrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.site-header {
+  background-color: var(--bluebonnet);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0.5rem 0;
+}
+
+.site-title,
+.site-title:visited {
+  color: white;
+  text-decoration: none;
+  font-family: 'Tangerine', cursive;
+  font-weight: 700;
+  font-size: 3.5rem;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6), 0 0 20px rgba(0,0,0,0.3);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  .nav-trigger { display: none; }
+
+  label[for="nav-trigger"] {
+    display: none;
+    background-color: var(--bluebonnet);
+    cursor: pointer;
+  }
+
+  .menu-icon {
+    display: block;
+    svg path { fill: var(--poppy-white); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .page-link {
+    color: var(--poppy-white);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    font-size: 0.95rem;
+
+    &:hover {
+      color: var(--primrose);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    label[for="nav-trigger"] {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 200px;
+      flex-direction: column;
+      gap: 0;
+      background: var(--bluebonnet);
+      border-left: 1px solid var(--poppy-white);
+      border-bottom: 1px solid var(--poppy-white);
+      padding: 0.5rem 0;
+      z-index: 1001;
+
+      .page-link {
+        padding: 0.5rem 1rem;
+      }
+    }
+
+    .nav-trigger:checked ~ .nav-links {
+      display: flex;
+    }
+  }
+}
+
+.site-banner {
+  position: relative;
+  height: 100px;
+  background-color: rgba(0,0,0,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid var(--paintbrush);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/tbh-blog/images/bluebonnet.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.6;
+  }
+
+  .site-title {
+    position: relative;
+  }
+}
+
+.page-content {
+  padding: 2rem 0;
+  min-height: calc(100vh - 250px);
+}
+
+.site-footer {
+  background-color: var(--bluebonnet);
+  color: var(--text-light);
+  border-top: 3px solid var(--paintbrush);
+  padding: 1rem 0;
+
+  p {
+    margin: 0;
+  }
+}
+
+a {
+  color: var(--bluebonnet);
+
+  &:hover {
+    color: var(--winecup);
+  }
+}
+
+h1, h2, h3 {
+  color: var(--bluebonnet);
+}
+
+.article-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+
+  .article-card {
+    background: white;
+    border: 1px solid #9999b5;
+    border-top: 4px solid var(--paintbrush);
+    padding: 1.25rem;
+    border-radius: 4px;
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+
+      a {
+        text-decoration: none;
+        color: var(--bluebonnet);
+
+        &:hover {
+          color: var(--paintbrush);
+        }
+      }
+    }
+  }
+}
+
+.post-header {
+  margin-bottom: 1.5rem;
+
+  .post-title {
+    margin: 0;
+  }
+}
+
+.post-content {
+  h2 {
+    margin-top: 2rem;
+  }
+}
