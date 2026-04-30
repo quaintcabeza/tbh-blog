@@ -4,15 +4,17 @@ Manage the plant database: scrape data, calculate derived fields, create profile
 
 Usage:
     python3 plantsdb.py "Salvia farinacea"
+    python3 plantsdb.py "Salvia farinacea" --descriptors "Cheerful, Drought-tolerant, Pollinator magnet"
     python3 plantsdb.py "Salvia farinacea, Echinacea purpurea"
     python3 plantsdb.py --csv plants_to_add.csv
     python3 plantsdb.py --refresh
     python3 plantsdb.py --refresh --rescrape
 
 Options:
-    --csv FILE      Read scientific names from a CSV file with 'scientific_name' column
-    --rescrape      Re-fetch data from websites even if plant already exists
-    --refresh       Recalculate derived fields for all existing plants
+    --csv FILE        Read plants from CSV with 'scientific_name' and optional 'descriptors' columns
+    --descriptors     Comma-separated descriptors (only for single plant)
+    --rescrape        Re-fetch data from websites even if plant already exists
+    --refresh         Recalculate derived fields for all existing plants
 
 Dependencies:
     pip install requests beautifulsoup4
@@ -414,7 +416,7 @@ def fetch_npsot_profile(npsot_url: str) -> Optional[dict]:
     if sci:
         data["scientific_name"] = sci
 
-    data["habit"] = _npsot_id(soup, "native-plant-growth-form")
+    data["habit"] = to_semicolons(_npsot_id(soup, "native-plant-growth-form"))
     data["duration"] = _npsot_id(soup, "native-plant-lifespan")
 
     h_min = _npsot_id(soup, "native-plant-height-min")
@@ -606,42 +608,66 @@ def process_plant(scientific_name: str, existing: Optional[dict], rescrape: bool
         except Exception as e:
             return {}, f"Scrape failed: {str(e)}"
 
-        # Preserve manual fields from existing
+        # Preserve manual and override fields from existing
         if existing:
             for field in MANUAL_FIELDS + OVERRIDE_FIELDS:
                 if existing.get(field):
                     data[field] = existing[field]
-        else:
-            # New plant: initialize manual fields to empty
-            for field in MANUAL_FIELDS:
-                data[field] = ""
-            # Initialize override fields to empty (will use calculated values)
-            for field in OVERRIDE_FIELDS:
-                data[field] = ""
 
     # Calculate derived fields
     data = calculate_all_fields(data)
 
+    # Override field mappings
+    override_mappings = {
+        "override_preferred_name": "preferred_name",
+        "override_bloom_color": "bloom_color",
+        "override_bloom_period": "bloom_period",
+        "override_light_requirement": "light_requirement",
+        "override_water_drops": "water_drops",
+        "override_size": "size",
+    }
+
+    if not existing:
+        # New plant: initialize manual fields to empty
+        for field in MANUAL_FIELDS:
+            data[field] = ""
+        # Set override fields to their source values
+        for override_field, source_field in override_mappings.items():
+            data[override_field] = data.get(source_field, "")
+    else:
+        # Existing plant: fill in any empty override fields
+        for override_field, source_field in override_mappings.items():
+            if not data.get(override_field):
+                data[override_field] = data.get(source_field, "")
+
     return data, None
+
+
+def parse_descriptors(descriptors_str: str) -> str:
+    """Convert comma-separated descriptors to semicolon-separated."""
+    if not descriptors_str:
+        return ""
+    return ";".join(d.strip() for d in descriptors_str.split(",") if d.strip())
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Manage the plant database")
     parser.add_argument("names", nargs="?", help="Scientific names (comma-separated)")
-    parser.add_argument("--csv", dest="csv_file", help="CSV file with scientific_name column")
+    parser.add_argument("--csv", dest="csv_file", help="CSV file with scientific_name and optional descriptors columns")
+    parser.add_argument("--descriptors", help="Comma-separated descriptors (only for single plant)")
     parser.add_argument("--rescrape", action="store_true", help="Re-fetch data from websites")
     parser.add_argument("--refresh", action="store_true", help="Recalculate fields for all plants")
 
     args = parser.parse_args()
 
-    # Collect scientific names to process
-    names_to_process = []
+    # Collect plants to process: list of (scientific_name, descriptors)
+    plants_to_process: list[tuple[str, str]] = []
 
     if args.refresh:
         # Process all existing plants
         plants = load_plantsdb()
-        names_to_process = list(plants.keys())
-        print(f"Refreshing {len(names_to_process)} existing plants...")
+        plants_to_process = [(name, "") for name in plants.keys()]
+        print(f"Refreshing {len(plants_to_process)} existing plants...")
     elif args.csv_file:
         csv_path = Path(args.csv_file)
         if not csv_path.exists():
@@ -651,12 +677,18 @@ def main() -> None:
             reader = csv.DictReader(f)
             for row in reader:
                 name = row.get("scientific_name", "").strip()
+                descriptors = parse_descriptors(row.get("descriptors", ""))
                 if name:
-                    names_to_process.append(name)
-        print(f"Processing {len(names_to_process)} plants from {args.csv_file}...")
+                    plants_to_process.append((name, descriptors))
+        print(f"Processing {len(plants_to_process)} plants from {args.csv_file}...")
     elif args.names:
-        names_to_process = [n.strip() for n in args.names.split(",") if n.strip()]
-        print(f"Processing {len(names_to_process)} plants...")
+        names = [n.strip() for n in args.names.split(",") if n.strip()]
+        descriptors = parse_descriptors(args.descriptors) if args.descriptors else ""
+        if len(names) > 1 and descriptors:
+            print("Warning: --descriptors only applies to single plant, ignoring", file=sys.stderr)
+            descriptors = ""
+        plants_to_process = [(name, descriptors if len(names) == 1 else "") for name in names]
+        print(f"Processing {len(plants_to_process)} plants...")
     else:
         parser.print_help()
         sys.exit(1)
@@ -666,11 +698,15 @@ def main() -> None:
     errors = []
     new_pages = 0
 
-    for i, name in enumerate(names_to_process):
-        print(f"  [{i+1}/{len(names_to_process)}] {name}...", end=" ", flush=True)
+    for i, (name, descriptors) in enumerate(plants_to_process):
+        print(f"  [{i+1}/{len(plants_to_process)}] {name}...", end=" ", flush=True)
 
         existing = plants.get(name)
         data, error = process_plant(name, existing, args.rescrape)
+
+        # Apply descriptors if provided (and plant doesn't already have them)
+        if descriptors and not data.get("descriptors"):
+            data["descriptors"] = descriptors
 
         if error:
             print(f"ERROR: {error}")
@@ -688,8 +724,9 @@ def main() -> None:
             else:
                 print("OK")
 
-        # Rate limiting
-        if i < len(names_to_process) - 1:
+        # Rate limiting only when hitting the web
+        did_scrape = not existing or args.rescrape
+        if did_scrape and i < len(plants_to_process) - 1:
             time.sleep(2)
 
     # Save results

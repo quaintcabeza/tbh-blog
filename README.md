@@ -20,7 +20,7 @@ The plant database is managed via `scripts/plantsdb.py`. It scrapes plant data f
 cd scripts
 python3 -m venv .venv
 source .venv/bin/activate
-pip install requests beautifulsoup4
+pip install -r requirements.txt
 ```
 
 ### Usage
@@ -30,12 +30,17 @@ Add a single plant:
 python3 plantsdb.py "Salvia farinacea"
 ```
 
+Add a plant with descriptors:
+```bash
+python3 plantsdb.py "Salvia farinacea" --descriptors "Striking, Versatile, Pollinator magnet"
+```
+
 Add multiple plants:
 ```bash
 python3 plantsdb.py "Salvia farinacea, Echinacea purpurea, Malvaviscus arboreus var. drummondii"
 ```
 
-Add plants from a CSV file (must have `scientific_name` column):
+Add plants from a CSV file (must have `scientific_name` column, optionally `descriptors`):
 ```bash
 python3 plantsdb.py --csv plants_to_add.csv
 ```
