@@ -414,7 +414,7 @@ def fetch_npsot_profile(npsot_url: str) -> Optional[dict]:
     if sci:
         data["scientific_name"] = sci
 
-    data["habit"] = _npsot_id(soup, "native-plant-growth-form")
+    data["habit"] = to_semicolons(_npsot_id(soup, "native-plant-growth-form"))
     data["duration"] = _npsot_id(soup, "native-plant-lifespan")
 
     h_min = _npsot_id(soup, "native-plant-height-min")
