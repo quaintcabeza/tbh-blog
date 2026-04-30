@@ -572,16 +572,11 @@ def create_plant_page(scientific_name: str) -> bool:
     images_dir = plant_dir / "images"
     images_dir.mkdir(exist_ok=True)
 
-    sections = load_profile_sections()
-
-    # Create stub MDX with empty sections
+    # Create minimal MDX with just frontmatter (no empty sections)
     content = f"""---
 scientific_name: "{scientific_name}"
 ---
-
 """
-    for section in sections:
-        content += f"## {section}\n\n"
 
     mdx_file.write_text(content, encoding="utf-8")
     return True

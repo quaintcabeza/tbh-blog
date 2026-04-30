@@ -1,0 +1,206 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { loadPlants, type ParsedPlant } from '../../data/plants';
+import { getCollection } from 'astro:content';
+import { formatDimensions, formatBloomPeriod, normalizeLightRequirements, SIZE_LABELS } from '../../data/plant-helpers';
+
+export async function getStaticPaths() {
+  const plants = loadPlants();
+  const plantWriteups = await getCollection('plants');
+
+  return plants.map(plant => {
+    const writeup = plantWriteups.find(w => w.data.scientific_name === plant.scientific_name);
+    return {
+      params: { slug: plant.slug },
+      props: { plant, writeup },
+    };
+  });
+}
+
+interface Props {
+  plant: ParsedPlant;
+  writeup?: Awaited<ReturnType<typeof getCollection<'plants'>>>[number];
+}
+
+const { plant, writeup } = Astro.props;
+const lightReqs = normalizeLightRequirements(plant);
+
+const Content = writeup ? (await writeup.render()).Content : null;
+---
+
+<BaseLayout title={plant.preferred_name}>
+  <article class="plant-profile">
+    <header class="plant-header">
+      <h1>{plant.preferred_name}</h1>
+      <p class="scientific-name">{plant.scientific_name}</p>
+      {plant.descriptors.length > 0 && (
+        <p class="descriptors">{plant.descriptors.join(' · ')}</p>
+      )}
+    </header>
+
+    <section class="plant-facts">
+      <h2>Quick Facts</h2>
+      <dl class="facts-grid">
+        <div class="fact">
+          <dt>Size</dt>
+          <dd>{SIZE_LABELS[plant.size as keyof typeof SIZE_LABELS] || plant.size} ({formatDimensions(plant)})</dd>
+        </div>
+        <div class="fact">
+          <dt>Duration</dt>
+          <dd>{plant.duration}</dd>
+        </div>
+        <div class="fact">
+          <dt>Habit</dt>
+          <dd>{plant.habit.join(', ')}</dd>
+        </div>
+        <div class="fact">
+          <dt>Light</dt>
+          <dd>{lightReqs.join(', ')}</dd>
+        </div>
+        <div class="fact">
+          <dt>Water</dt>
+          <dd>
+            {plant.water_drops !== null && (
+              <span class="water-drops">
+                {'💧'.repeat(plant.water_drops)}
+                {plant.water_drops === 0 && 'Very Low'}
+                {plant.water_drops === 1 && 'Low'}
+                {plant.water_drops === 2 && 'Medium'}
+                {plant.water_drops === 3 && 'High'}
+              </span>
+            )}
+          </dd>
+        </div>
+        <div class="fact">
+          <dt>Bloom Period</dt>
+          <dd>{formatBloomPeriod(plant)}</dd>
+        </div>
+        <div class="fact">
+          <dt>Bloom Color</dt>
+          <dd>{plant.bloom_color.join(', ')}</dd>
+        </div>
+        <div class="fact">
+          <dt>Soil</dt>
+          <dd>{plant.soil.join(', ')}</dd>
+        </div>
+      </dl>
+    </section>
+
+    {Content && (
+      <section class="plant-writeup">
+        <Content />
+      </section>
+    )}
+
+    <section class="plant-links">
+      <h2>External Resources</h2>
+      <ul>
+        {plant.wildflower_url && (
+          <li><a href={plant.wildflower_url} target="_blank" rel="noopener">Lady Bird Johnson Wildflower Center</a></li>
+        )}
+        {plant.npsot_url && (
+          <li><a href={plant.npsot_url} target="_blank" rel="noopener">Native Plant Society of Texas</a></li>
+        )}
+      </ul>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .plant-profile {
+    max-width: 800px;
+  }
+
+  .plant-header {
+    margin-bottom: 2rem;
+  }
+
+  .plant-header h1 {
+    margin: 0 0 0.25rem;
+  }
+
+  .scientific-name {
+    font-style: italic;
+    color: #666;
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .descriptors {
+    color: #777;
+    margin: 0;
+  }
+
+  .plant-facts {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .plant-facts h2 {
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+  }
+
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .fact {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fact dt {
+    font-weight: 600;
+    color: var(--bluebonnet);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .fact dd {
+    margin: 0.25rem 0 0;
+  }
+
+  .plant-writeup {
+    margin-bottom: 2rem;
+  }
+
+  .plant-writeup :global(h2) {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+
+  .plant-writeup :global(h2:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .plant-links {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .plant-links h2 {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+  }
+
+  .plant-links ul {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  .plant-links li {
+    margin-bottom: 0.5rem;
+  }
+</style>

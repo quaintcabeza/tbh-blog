@@ -1,0 +1,81 @@
+---
+import type { ParsedPlant } from '../../data/plants';
+
+interface Props {
+  plant: ParsedPlant;
+}
+
+const { plant } = Astro.props;
+const plantUrl = `${import.meta.env.BASE_URL}/plants/${plant.slug}/`;
+---
+
+<a href={plantUrl} class="plant-card">
+  <div class="plant-card-content">
+    <h3 class="plant-name">{plant.preferred_name}</h3>
+    <p class="plant-scientific">{plant.scientific_name}</p>
+    <div class="plant-meta">
+      <span class="plant-size">{plant.size}</span>
+      {plant.water_drops !== null && (
+        <span class="plant-water">
+          {'💧'.repeat(plant.water_drops || 0)}
+          {'○'.repeat(3 - (plant.water_drops || 0))}
+        </span>
+      )}
+    </div>
+    {plant.descriptors.length > 0 && (
+      <p class="plant-descriptors">{plant.descriptors.join(' · ')}</p>
+    )}
+  </div>
+</a>
+
+<style>
+  .plant-card {
+    display: block;
+    background: white;
+    border: 1px solid #9999b5;
+    border-top: 4px solid var(--paintbrush);
+    border-radius: 4px;
+    padding: 1rem;
+    text-decoration: none;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .plant-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .plant-name {
+    margin: 0 0 0.25rem;
+    font-size: 1.1rem;
+    color: var(--bluebonnet);
+  }
+
+  .plant-scientific {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #666;
+  }
+
+  .plant-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  .plant-size {
+    font-weight: 600;
+  }
+
+  .plant-water {
+    letter-spacing: 2px;
+  }
+
+  .plant-descriptors {
+    margin: 0.5rem 0 0;
+    font-size: 0.8rem;
+    color: #777;
+  }
+</style>

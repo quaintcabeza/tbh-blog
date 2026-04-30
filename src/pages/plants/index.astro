@@ -1,6 +1,32 @@
 ---
-import PageLayout from '../../layouts/PageLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PlantCard from '../../components/plant/PlantCard.astro';
+import { loadPlants } from '../../data/plants';
+import { sortPlantsDefault } from '../../data/plant-helpers';
+
+const plants = sortPlantsDefault(loadPlants());
 ---
 
-<PageLayout title="Catalogue">
-</PageLayout>
+<BaseLayout title="Catalogue">
+  <h1>Plant Catalogue</h1>
+  <p class="catalogue-intro">{plants.length} plants in the collection</p>
+
+  <div class="plant-grid">
+    {plants.map(plant => (
+      <PlantCard plant={plant} />
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .catalogue-intro {
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+
+  .plant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+</style>
