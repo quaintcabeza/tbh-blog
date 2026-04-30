@@ -10,14 +10,17 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.10",
     "@astrojs/mdx": "^4.2.5",
     "@astrojs/react": "^4.2.1",
+    "astro": "^5.7.10",
+    "papaparse": "^5.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "sass": "^1.87.0"
+    "sass": "^1.87.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "typescript": "^5.8.3"
