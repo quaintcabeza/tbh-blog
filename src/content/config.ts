@@ -8,4 +8,11 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const plants = defineCollection({
+  type: 'content',
+  schema: z.object({
+    scientific_name: z.string(),
+  }),
+});
+
+export const collections = { blog, plants };
