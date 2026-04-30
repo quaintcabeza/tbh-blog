@@ -20,7 +20,7 @@ The plant database is managed via `scripts/plantsdb.py`. It scrapes plant data f
 cd scripts
 python3 -m venv .venv
 source .venv/bin/activate
-pip install requests beautifulsoup4
+pip install -r requirements.txt
 ```
 
 ### Usage
