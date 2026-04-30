@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+---
+
+<BaseLayout title="Blog">
+  <h1>Blog</h1>
+  <div class="article-grid">
+    {posts.map((post) => (
+      <div class="article-card">
+        <h3>
+          <a href={`${import.meta.env.BASE_URL}/blog/${post.slug}/`}>{post.data.title}</a>
+        </h3>
+      </div>
+    ))}
+  </div>
+</BaseLayout>

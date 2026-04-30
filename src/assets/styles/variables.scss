@@ -1,0 +1,19 @@
+:root {
+  --bluebonnet: #22226a;
+  --paintbrush: #d95f2b;
+  --winecup: #6b2d8b;
+  --primrose: #e8749a;
+  --daisy: #f2c94c;
+  --poppy-white: #f8f5ec;
+  --text-dark: #2c2c2c;
+  --text-light: #f8f5ec;
+}
+
+$bluebonnet: var(--bluebonnet);
+$paintbrush: var(--paintbrush);
+$winecup: var(--winecup);
+$primrose: var(--primrose);
+$daisy: var(--daisy);
+$poppy-white: var(--poppy-white);
+$text-dark: var(--text-dark);
+$text-light: var(--text-light);
