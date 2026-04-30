@@ -606,21 +606,31 @@ def process_plant(scientific_name: str, existing: Optional[dict], rescrape: bool
         except Exception as e:
             return {}, f"Scrape failed: {str(e)}"
 
-        # Preserve manual fields from existing
+        # Preserve manual and override fields from existing
         if existing:
             for field in MANUAL_FIELDS + OVERRIDE_FIELDS:
                 if existing.get(field):
                     data[field] = existing[field]
-        else:
-            # New plant: initialize manual fields to empty
-            for field in MANUAL_FIELDS:
-                data[field] = ""
-            # Initialize override fields to empty (will use calculated values)
-            for field in OVERRIDE_FIELDS:
-                data[field] = ""
 
     # Calculate derived fields
     data = calculate_all_fields(data)
+
+    # For new plants, set override fields to corresponding scraped/calculated values
+    if not existing:
+        # Initialize manual fields to empty
+        for field in MANUAL_FIELDS:
+            data[field] = ""
+        # Set override fields to their source values
+        override_mappings = {
+            "override_preferred_name": "preferred_name",
+            "override_bloom_color": "bloom_color",
+            "override_bloom_period": "bloom_period",
+            "override_light_requirement": "light_requirement",
+            "override_water_drops": "water_drops",
+            "override_size": "size",
+        }
+        for override_field, source_field in override_mappings.items():
+            data[override_field] = data.get(source_field, "")
 
     return data, None
 
